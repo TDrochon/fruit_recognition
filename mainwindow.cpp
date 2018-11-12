@@ -11,7 +11,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
     // read an image
-    cv::Mat image = cv::imread("f://1.jpg", 1);
+    cv::Mat image = cv::imread("D:\\Google Drive\\Etudes\\M1\\Projet_agile\\Pomme_verte.jpg", 1);
     // create image window named "My Image"
     cv::namedWindow("My Image");
     // show the image on window
