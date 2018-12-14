@@ -25,7 +25,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
      //image de fond
-     QPixmap pix("C:/Users/valbl/Pictures/fe0005-seder-1.jpg");
+     QPixmap pix("C:/Users/valbl/Documents/GitHub/fruit_recognition/fe0005-seder-1.jpg");
      ui->fond->setPixmap(pix);
 
      //ouvre le fichier selectionné
