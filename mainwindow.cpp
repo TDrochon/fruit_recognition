@@ -13,6 +13,8 @@
 #include <opencv2/imgproc.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 
+#include "iostream"
+
 #include "QMessageBox"
 
 using namespace std;
@@ -70,51 +72,58 @@ void MainWindow::on_bouton_insertion_image_clicked()
     this->ui->image_debut->setPixmap(pixmap_img->scaled(x,y));
 }
 
-
-cv::Mat cvmat_from_qimage(const QImage& qimage)
-{
-    cv::Mat mat = cv::Mat(qimage.height(), qimage.width(), CV_8UC4, (uchar*)qimage.bits(), qimage.bytesPerLine());
-    cv::Mat mat2 = cv::Mat(mat.rows, mat.cols, CV_8UC3 );
-    int from_to[] = { 0,0,  1,1,  2,2 };
-    cv::mixChannels( &mat, 1, &mat2, 1, from_to, 3 );
-    return mat2;
-}
-
-QImage qimage_from_cvmat(const cv::Mat& mat)
-{
-    cv::Mat rgb;
-    cvtColor(mat, rgb, CV_BGR2RGB);
-    return QImage((const unsigned char*)(rgb.data), rgb.cols, rgb.rows, QImage::Format_RGB888);
-}
-
 void MainWindow::on_boutuon_traitement_clicked()
 {
-    QMessageBox msgBox;
-
 
     //transformer QString en String (std::string imageCV = fichier.toLocal8Bit().constData();)
-    QString fichier = getCheminImage();
-    msgBox.setText("fichier."+ fichier);
+    cv::String fichier = getCheminImage().toStdString();
+
+    Mat image = imread(fichier, IMREAD_COLOR );
+    Mat gray_image;
+    Mat src_image;
+    cvtColor( image, gray_image, COLOR_BGR2GRAY );
+    cv :: threshold(gray_image, src_image, 220, 255, cv::THRESH_BINARY);
+
+    //Find the contours. Use the contourOutput Mat so the original image doesn't get overwritten
+       std::vector<std::vector<cv::Point> > contours;
+       cv::Mat contourOutput = src_image.clone();
+       cv::findContours( contourOutput, contours, cv::RETR_LIST, cv::CHAIN_APPROX_NONE );
+
+       //Draw the contours
+       cv::Mat contourImage(src_image.size(), CV_8UC3, cv::Scalar(0,0,0));
+       cv::Scalar colors[3];
+       colors[0] = cv::Scalar(255, 0, 0);
+       colors[1] = cv::Scalar(0, 255, 0);
+       colors[2] = cv::Scalar(0, 0, 255);
+       for (size_t idx = 0; idx < contours.size(); idx++)
+       {
+        cv::drawContours(contourImage, contours, idx, colors[idx % 3]);
+        cout<<"idx = "<<idx<<endl;
+       }
+
+    imwrite( "Gray_Image.jpg", gray_image );
+    imwrite( "src_Image.jpg", src_image );
+    imwrite( "Coutours.jpg", gray_image );
 
 
-    QImage      image1(fichier);
+    int x = this->ui->image_fin->width();
+    int y = this->ui->image_fin->height();
+    QPixmap *pixmap_img = new QPixmap("Coutours.jpg");
+    this->ui->image_fin->setPixmap(pixmap_img->scaled(x,y));
 
+
+
+/*
     cv::Mat src = cvmat_from_qimage(image1) ;
+
     Mat src_gray;
 
-    std::string imageCV = fichier.toLocal8Bit().constData();
-    cv::GaussianBlur (src, src_gray, cv::Size (1, 1), 0, 0, cv::BORDER_DEFAULT);
-    QImage sortie = qimage_from_cvmat(src_gray);
-    QFile file("image.png");
-    file.open(QIODevice::WriteOnly);
 
-    sortie.save(&file, "PNG");
-    file.close();
+    QImage sortie = qimage_from_cvmat(src);
 
-    msgBox.exec();
-}
-
-void MainWindow::on_fond_linkActivated(const QString &link)
-{
-
+    int x = this->ui->image_fin->width();
+    int y = this->ui->image_fin->height();
+    QPixmap *img_aff = new  QPixmap();
+    img_aff->convertFromImage(sortie);
+    this->ui->image_fin->setPixmap(img_aff->scaled(x,y));*/
 }

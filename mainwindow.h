@@ -21,8 +21,6 @@ public:
 private slots:
     void on_bouton_insertion_image_clicked();
 
-    void on_fond_linkActivated(const QString &link);
-
     void on_boutuon_traitement_clicked();
 
 private:
