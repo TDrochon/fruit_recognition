@@ -16,7 +16,6 @@
 #include "iostream"
 
 #include "QMessageBox"
-
 using namespace std;
 using namespace cv;
 
@@ -98,12 +97,11 @@ void MainWindow::on_boutuon_traitement_clicked()
        for (size_t idx = 0; idx < contours.size(); idx++)
        {
         cv::drawContours(contourImage, contours, idx, colors[idx % 3]);
-        cout<<"idx = "<<idx<<endl;
        }
 
     imwrite( "Gray_Image.jpg", gray_image );
     imwrite( "src_Image.jpg", src_image );
-    imwrite( "Coutours.jpg", gray_image );
+    imwrite( "Coutours.jpg", contourImage );
 
 
     int x = this->ui->image_fin->width();
