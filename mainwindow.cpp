@@ -23,10 +23,10 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
-    ui->setupUi(this);
+     ui->setupUi(this);
 
      //image de fond
-     QPixmap pix("C:/Users/valbl/Documents/GitHub/fruit_recognition/fe0005-seder-1.jpg");
+     QPixmap pix("C:/Users/tangu/Documents/GitHub/fruit_recognition/fe0005-seder-1.jpg");
      ui->fond->setPixmap(pix);
 
      //ouvre le fichier selectionné
@@ -34,11 +34,10 @@ MainWindow::MainWindow(QWidget *parent) :
      setCheminImage(fichier);
 
      //positionne l'image sur le label et la mais au forma de celle-ci
-     QString image = getCheminImage();
-     int x = this->ui->image_debut->width();
-     int y = this->ui->image_debut->height();
-     QPixmap *pixmap_img = new QPixmap(image);
-     this->ui->image_debut->setPixmap(pixmap_img->scaled(x,y));
+     int x = this->ui->image->width();
+     int y = this->ui->image->height();
+     QPixmap *img = new QPixmap(getCheminImage());
+     this->ui->image->setPixmap(img->scaled(x,y));
 
 }
 
@@ -57,71 +56,78 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::on_bouton_insertion_image_clicked()
+void MainWindow::on_bouton_insertion_clicked()
 {
     //ouvre le fichier selectionné
     QString fichier = QFileDialog :: getOpenFileName( this , tr( "Ouvrir un fichier" ) , "/ home" , tr( "Images (* .png * .xpm * .jpg)" ));
     setCheminImage(fichier);
 
     //positionne l'image sur le label et la mais au forma de celle-ci
-    QString image = getCheminImage();
-    int x = this->ui->image_debut->width();
-    int y = this->ui->image_debut->height();
-    QPixmap *pixmap_img = new QPixmap(image);
-    this->ui->image_debut->setPixmap(pixmap_img->scaled(x,y));
+    int x = this->ui->image->width();
+    int y = this->ui->image->height();
+    QPixmap *img = new QPixmap(getCheminImage());
+    this->ui->image->setPixmap(img->scaled(x,y));
 }
 
-void MainWindow::on_boutuon_traitement_clicked()
+void MainWindow::on_bouton_traitement_clicked()
 {
 
     //transformer QString en String (std::string imageCV = fichier.toLocal8Bit().constData();)
     cv::String fichier = getCheminImage().toStdString();
 
     Mat image = imread(fichier, IMREAD_COLOR );
+    Mat blur_image;
     Mat gray_image;
-    Mat src_image;
+    Mat binary_image;
+    Mat circle_image;
+
+    cv::medianBlur(image, blur_image, 15);
     cvtColor( image, gray_image, COLOR_BGR2GRAY );
-    cv :: threshold(gray_image, src_image, 220, 255, cv::THRESH_BINARY);
+    cv :: threshold(gray_image, binary_image, 200, 255, cv::THRESH_BINARY);
+
+    vector<Vec3f> circles;
+    cv::HoughCircles( gray_image, circles, HOUGH_GRADIENT, 1, gray_image.rows/4, 100, 30, gray_image.rows/4.5, gray_image.rows/2 );
+    for( size_t i = 0; i < circles.size(); i++ )
+    {
+        Point center(cvRound(circles[i][0]), cvRound(circles[i][1]));
+        int radius = cvRound(circles[i][2]);
+        // circle center
+        cv::circle( gray_image, center, 3, Scalar(255,0,0), -1, 8, 0 );
+        // circle outline
+        cv::circle( gray_image, center, radius, Scalar(0,0,255), 3, 8, 0 );
+     }
 
     //Find the contours. Use the contourOutput Mat so the original image doesn't get overwritten
-       std::vector<std::vector<cv::Point> > contours;
-       cv::Mat contourOutput = src_image.clone();
-       cv::findContours( contourOutput, contours, cv::RETR_LIST, cv::CHAIN_APPROX_NONE );
+    std::vector<std::vector<cv::Point> > contours;
+    cv::findContours( binary_image, contours, cv::RETR_LIST, cv::CHAIN_APPROX_NONE );
 
-       //Draw the contours
-       cv::Mat contourImage(src_image.size(), CV_8UC3, cv::Scalar(0,0,0));
-       cv::Scalar colors[3];
-       colors[0] = cv::Scalar(255, 0, 0);
-       colors[1] = cv::Scalar(0, 255, 0);
-       colors[2] = cv::Scalar(0, 0, 255);
-       for (size_t idx = 0; idx < contours.size(); idx++)
-       {
-        cv::drawContours(contourImage, contours, idx, colors[idx % 3]);
-       }
+    //Draw the contours
+    cv::Mat contour_image(binary_image.size(), CV_8UC3, cv::Scalar(0,0,0));
+    cv::Scalar colors[3];
+    colors[0] = cv::Scalar(255, 0, 0);
+    colors[1] = cv::Scalar(0, 255, 0);
+    colors[2] = cv::Scalar(0, 0, 255);
+    for (size_t idx = 0; idx < contours.size(); idx++)
+    {
+        cv::drawContours(contour_image, contours, idx, colors[idx % 3]);
+    }
 
-    imwrite( "Gray_Image.jpg", gray_image );
-    imwrite( "src_Image.jpg", src_image );
-    imwrite( "Coutours.jpg", contourImage );
+    imwrite( "blur_image.jpg", blur_image );
+    imwrite( "gray_image.jpg", gray_image );
+    imwrite( "binary_image.jpg", binary_image );
+    imwrite( "contour_image.jpg", contour_image );
 
+    int x = this->ui->filtre1->width();
+    int y = this->ui->filtre1->height();
 
-    int x = this->ui->image_fin->width();
-    int y = this->ui->image_fin->height();
-    QPixmap *pixmap_img = new QPixmap("Coutours.jpg");
-    this->ui->image_fin->setPixmap(pixmap_img->scaled(x,y));
+    QPixmap *filtre1 = new QPixmap("blur_image.jpg");
+    this->ui->filtre1->setPixmap(filtre1->scaled(x,y));
+    QPixmap *filtre2 = new QPixmap("gray_image.jpg");
+    this->ui->filtre2->setPixmap(filtre2->scaled(x,y));
+    QPixmap *filtre3 = new QPixmap("binary_image.jpg");
+    this->ui->filtre3->setPixmap(filtre3->scaled(x,y));
+    QPixmap *filtre4 = new QPixmap("contour_image.jpg");
+    this->ui->filtre4->setPixmap(filtre4->scaled(x,y));
 
-
-
-/*
-    cv::Mat src = cvmat_from_qimage(image1) ;
-
-    Mat src_gray;
-
-
-    QImage sortie = qimage_from_cvmat(src);
-
-    int x = this->ui->image_fin->width();
-    int y = this->ui->image_fin->height();
-    QPixmap *img_aff = new  QPixmap();
-    img_aff->convertFromImage(sortie);
-    this->ui->image_fin->setPixmap(img_aff->scaled(x,y));*/
+    this->ui->nb_detect->setText("<html><head/><body><p><span style=\" color:#ffffff;\">Nombre de pomme détectée : " + QString::number(circles.size()) + "</span></p></body></html>");
 }

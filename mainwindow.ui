@@ -14,33 +14,33 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QLabel" name="image_debut">
+   <widget class="QLabel" name="image">
     <property name="geometry">
      <rect>
       <x>50</x>
-      <y>150</y>
+      <y>130</y>
       <width>431</width>
-      <height>271</height>
+      <height>291</height>
      </rect>
     </property>
     <property name="text">
      <string/>
     </property>
    </widget>
-   <widget class="QLabel" name="image_fin">
+   <widget class="QLabel" name="filtre4">
     <property name="geometry">
      <rect>
-      <x>650</x>
-      <y>150</y>
-      <width>431</width>
-      <height>271</height>
+      <x>820</x>
+      <y>280</y>
+      <width>261</width>
+      <height>141</height>
      </rect>
     </property>
     <property name="text">
      <string/>
     </property>
    </widget>
-   <widget class="QLabel" name="label">
+   <widget class="QLabel" name="title">
     <property name="geometry">
      <rect>
       <x>300</x>
@@ -60,7 +60,7 @@
      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#ffffff;&quot;&gt;Détecteur de Fruit&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="bouton_insertion_image">
+   <widget class="QPushButton" name="bouton_insertion">
     <property name="geometry">
      <rect>
       <x>200</x>
@@ -80,7 +80,7 @@
      <string>Ouvrir</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="boutuon_traitement">
+   <widget class="QPushButton" name="bouton_traitement">
     <property name="geometry">
      <rect>
       <x>800</x>
@@ -100,33 +100,13 @@
      <string>Traitement</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="bouton_detail">
-    <property name="geometry">
-     <rect>
-      <x>500</x>
-      <y>480</y>
-      <width>131</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>14</pointsize>
-      <weight>75</weight>
-      <bold>true</bold>
-     </font>
-    </property>
-    <property name="text">
-     <string>Détail</string>
-    </property>
-   </widget>
    <widget class="QLabel" name="fond">
     <property name="geometry">
      <rect>
-      <x>-6</x>
-      <y>-15</y>
+      <x>-10</x>
+      <y>0</y>
       <width>1151</width>
-      <height>631</height>
+      <height>641</height>
      </rect>
     </property>
     <property name="text">
@@ -139,33 +119,140 @@
      <bool>true</bool>
     </property>
    </widget>
+   <widget class="QLabel" name="filtre1">
+    <property name="geometry">
+     <rect>
+      <x>550</x>
+      <y>130</y>
+      <width>261</width>
+      <height>141</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="filtre3">
+    <property name="geometry">
+     <rect>
+      <x>550</x>
+      <y>280</y>
+      <width>261</width>
+      <height>141</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="filtre2">
+    <property name="geometry">
+     <rect>
+      <x>820</x>
+      <y>130</y>
+      <width>261</width>
+      <height>141</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="nb_detect">
+    <property name="geometry">
+     <rect>
+      <x>380</x>
+      <y>460</y>
+      <width>371</width>
+      <height>91</height>
+     </rect>
+    </property>
+    <property name="palette">
+     <palette>
+      <active>
+       <colorrole role="Text">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>255</red>
+          <green>255</green>
+          <blue>255</blue>
+         </color>
+        </brush>
+       </colorrole>
+       <colorrole role="PlaceholderText">
+        <brush brushstyle="SolidPattern">
+         <color alpha="128">
+          <red>255</red>
+          <green>255</green>
+          <blue>255</blue>
+         </color>
+        </brush>
+       </colorrole>
+      </active>
+      <inactive>
+       <colorrole role="Text">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>255</red>
+          <green>255</green>
+          <blue>255</blue>
+         </color>
+        </brush>
+       </colorrole>
+       <colorrole role="PlaceholderText">
+        <brush brushstyle="SolidPattern">
+         <color alpha="128">
+          <red>255</red>
+          <green>255</green>
+          <blue>255</blue>
+         </color>
+        </brush>
+       </colorrole>
+      </inactive>
+      <disabled>
+       <colorrole role="Text">
+        <brush brushstyle="SolidPattern">
+         <color alpha="127">
+          <red>255</red>
+          <green>255</green>
+          <blue>255</blue>
+         </color>
+        </brush>
+       </colorrole>
+       <colorrole role="PlaceholderText">
+        <brush brushstyle="SolidPattern">
+         <color alpha="128">
+          <red>231</red>
+          <green>231</green>
+          <blue>231</blue>
+         </color>
+        </brush>
+       </colorrole>
+      </disabled>
+     </palette>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>15</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#ffffff;&quot;&gt;Nombre de pomme détectée : &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+   </widget>
    <zorder>fond</zorder>
-   <zorder>image_debut</zorder>
-   <zorder>image_fin</zorder>
-   <zorder>label</zorder>
-   <zorder>bouton_insertion_image</zorder>
-   <zorder>boutuon_traitement</zorder>
-   <zorder>bouton_detail</zorder>
+   <zorder>image</zorder>
+   <zorder>filtre4</zorder>
+   <zorder>title</zorder>
+   <zorder>bouton_insertion</zorder>
+   <zorder>bouton_traitement</zorder>
+   <zorder>filtre1</zorder>
+   <zorder>filtre3</zorder>
+   <zorder>filtre2</zorder>
+   <zorder>nb_detect</zorder>
   </widget>
-  <widget class="QMenuBar" name="menuBar">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>1141</width>
-     <height>26</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QToolBar" name="mainToolBar">
-   <attribute name="toolBarArea">
-    <enum>TopToolBarArea</enum>
-   </attribute>
-   <attribute name="toolBarBreak">
-    <bool>false</bool>
-   </attribute>
-  </widget>
-  <widget class="QStatusBar" name="statusBar"/>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>

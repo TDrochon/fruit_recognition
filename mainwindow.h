@@ -19,9 +19,9 @@ public:
 
 
 private slots:
-    void on_bouton_insertion_image_clicked();
+    void on_bouton_insertion_clicked();
 
-    void on_boutuon_traitement_clicked();
+    void on_bouton_traitement_clicked();
 
 private:
     Ui::MainWindow *ui;
