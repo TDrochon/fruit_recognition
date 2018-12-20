@@ -72,19 +72,24 @@ void MainWindow::on_bouton_insertion_clicked()
 void MainWindow::on_bouton_traitement_clicked()
 {
 
-    //transformer QString en String (std::string imageCV = fichier.toLocal8Bit().constData();)
+    /*Ouverture de l'image et creation des images cv*/
     cv::String fichier = getCheminImage().toStdString();
-
     Mat image = imread(fichier, IMREAD_COLOR );
     Mat blur_image;
     Mat gray_image;
     Mat binary_image;
     Mat circle_image;
 
+    /*Filtre median pour le blur*/
     cv::medianBlur(image, blur_image, 15);
+
+    /*Filtre noir et blanc*/
     cvtColor( image, gray_image, COLOR_BGR2GRAY );
+
+    /*Filtre binaire noir ou blanc*/
     cv :: threshold(gray_image, binary_image, 200, 255, cv::THRESH_BINARY);
 
+    /*Detection des cercles*/
     vector<Vec3f> circles;
     cv::HoughCircles( gray_image, circles, HOUGH_GRADIENT, 1, gray_image.rows/4, 100, 30, gray_image.rows/4.5, gray_image.rows/2 );
     for( size_t i = 0; i < circles.size(); i++ )
@@ -97,11 +102,9 @@ void MainWindow::on_bouton_traitement_clicked()
         cv::circle( gray_image, center, radius, Scalar(0,0,255), 3, 8, 0 );
      }
 
-    //Find the contours. Use the contourOutput Mat so the original image doesn't get overwritten
+    /*Detection des contours*/
     std::vector<std::vector<cv::Point> > contours;
     cv::findContours( binary_image, contours, cv::RETR_LIST, cv::CHAIN_APPROX_NONE );
-
-    //Draw the contours
     cv::Mat contour_image(binary_image.size(), CV_8UC3, cv::Scalar(0,0,0));
     cv::Scalar colors[3];
     colors[0] = cv::Scalar(255, 0, 0);
@@ -112,14 +115,15 @@ void MainWindow::on_bouton_traitement_clicked()
         cv::drawContours(contour_image, contours, idx, colors[idx % 3]);
     }
 
+    /*Enregistrement des images filtrées*/
     imwrite( "blur_image.jpg", blur_image );
     imwrite( "gray_image.jpg", gray_image );
     imwrite( "binary_image.jpg", binary_image );
     imwrite( "contour_image.jpg", contour_image );
 
+    /*Affichage des images*/
     int x = this->ui->filtre1->width();
     int y = this->ui->filtre1->height();
-
     QPixmap *filtre1 = new QPixmap("blur_image.jpg");
     this->ui->filtre1->setPixmap(filtre1->scaled(x,y));
     QPixmap *filtre2 = new QPixmap("gray_image.jpg");
@@ -129,5 +133,6 @@ void MainWindow::on_bouton_traitement_clicked()
     QPixmap *filtre4 = new QPixmap("contour_image.jpg");
     this->ui->filtre4->setPixmap(filtre4->scaled(x,y));
 
+    /*Affichage du nombre de pommes détectées*/
     this->ui->nb_detect->setText("<html><head/><body><p><span style=\" color:#ffffff;\">Nombre de pomme détectée : " + QString::number(circles.size()) + "</span></p></body></html>");
 }
