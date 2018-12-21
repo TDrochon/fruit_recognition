@@ -26,11 +26,11 @@ MainWindow::MainWindow(QWidget *parent) :
      ui->setupUi(this);
 
      //image de fond
-     QPixmap pix("C:/Users/tangu/Documents/GitHub/fruit_recognition/fe0005-seder-1.jpg");
+     QPixmap pix("fe0005-seder-1.jpg");
      ui->fond->setPixmap(pix);
 
      //ouvre le fichier selectionné
-     QString fichier = QFileDialog :: getOpenFileName( this , tr( "Ouvrir un fichier" ) , "/ home" , tr( "Images (* .png * .xpm * .jpg)" ));
+     QString fichier = QFileDialog :: getOpenFileName( this , tr( "Ouvrir un fichier" ) , "images/" , tr( "Images (* .png * .xpm * .jpg)" ));
      setCheminImage(fichier);
 
      //positionne l'image sur le label et la mais au forma de celle-ci
@@ -116,21 +116,21 @@ void MainWindow::on_bouton_traitement_clicked()
     }
 
     /*Enregistrement des images filtrées*/
-    imwrite( "blur_image.jpg", blur_image );
-    imwrite( "gray_image.jpg", gray_image );
-    imwrite( "binary_image.jpg", binary_image );
-    imwrite( "contour_image.jpg", contour_image );
+    imwrite( "results/blur_image.jpg", blur_image );
+    imwrite( "results/gray_image.jpg", gray_image );
+    imwrite( "results/binary_image.jpg", binary_image );
+    imwrite( "results/contour_image.jpg", contour_image );
 
     /*Affichage des images*/
     int x = this->ui->filtre1->width();
     int y = this->ui->filtre1->height();
-    QPixmap *filtre1 = new QPixmap("blur_image.jpg");
+    QPixmap *filtre1 = new QPixmap("results/blur_image.jpg");
     this->ui->filtre1->setPixmap(filtre1->scaled(x,y));
-    QPixmap *filtre2 = new QPixmap("gray_image.jpg");
+    QPixmap *filtre2 = new QPixmap("results/gray_image.jpg");
     this->ui->filtre2->setPixmap(filtre2->scaled(x,y));
-    QPixmap *filtre3 = new QPixmap("binary_image.jpg");
+    QPixmap *filtre3 = new QPixmap("results/binary_image.jpg");
     this->ui->filtre3->setPixmap(filtre3->scaled(x,y));
-    QPixmap *filtre4 = new QPixmap("contour_image.jpg");
+    QPixmap *filtre4 = new QPixmap("results/contour_image.jpg");
     this->ui->filtre4->setPixmap(filtre4->scaled(x,y));
 
     /*Affichage du nombre de pommes détectées*/
