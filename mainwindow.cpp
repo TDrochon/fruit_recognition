@@ -59,7 +59,7 @@ MainWindow::~MainWindow()
 void MainWindow::on_bouton_insertion_clicked()
 {
     //ouvre le fichier selectionné
-    QString fichier = QFileDialog :: getOpenFileName( this , tr( "Ouvrir un fichier" ) , "/ home" , tr( "Images (* .png * .xpm * .jpg)" ));
+    QString fichier = QFileDialog :: getOpenFileName( this , tr( "Ouvrir un fichier" ) , "images/" , tr( "Images (* .png * .xpm * .jpg)" ));
     setCheminImage(fichier);
 
     //positionne l'image sur le label et la mais au forma de celle-ci
